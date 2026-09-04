@@ -1,7 +1,22 @@
+
+---
+
+## 🛡️ .gitignore atualizado
+
+```gitignore
+# Ambiente virtual
 venv/
+env/
+ENV/
+
+# Arquivos Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
-*.xlsx
+
+
+# Outros
+.DS_Store
+Thumbs.db

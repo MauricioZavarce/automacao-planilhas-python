@@ -14,9 +14,10 @@ Automatize tarefas repetitivas em planilhas usando Python. Este projeto foi dese
 - 📥 **Ler dados** de planilhas `.xlsx`, `.xls`, `.csv`
 - 📤 **Escrever e exportar** dados processados
 - 🧹 **Limpeza e transformação** de dados com `pandas`
-- 🎨 **Formatação automática** (cores, largura de colunas, estilos)
-- 🔁 **Automação de tarefas repetitivas** (relatórios, consolidações)
-- 🧮 **Fórmulas e cálculos** aplicados programaticamente
+- 🎨 **Formatação automática** (negrito, cores, largura de colunas)
+- 🔁 **Automação de tarefas repetitivas** via linha de comando
+- 🧮 **Cálculos automáticos** (ex.: coluna Total)
+- 🛡️ **Tratamento de erros** (arquivo inexistente, colunas ausentes)
 
 ---
 
@@ -24,8 +25,8 @@ Automatize tarefas repetitivas em planilhas usando Python. Este projeto foi dese
 
 - **Python 3.8+**
 - [**Pandas**](https://pandas.pydata.org/) – manipulação de dados
-- [**OpenPyXL**](https://openpyxl.readthedocs.io/) – leitura/escrita de arquivos Excel
-- [**XlsxWriter**](https://xlsxwriter.readthedocs.io/) – criação de arquivos Excel com formatação avançada (opcional)
+- [**OpenPyXL**](https://openpyxl.readthedocs.io/) – leitura/escrita e formatação de arquivos Excel
+- [**Argparse**](https://docs.python.org/3/library/argparse.html) – interface de linha de comando
 
 ---
 
