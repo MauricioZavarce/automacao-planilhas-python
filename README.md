@@ -18,6 +18,7 @@ Automatize tarefas repetitivas em planilhas usando Python. Este projeto foi dese
 - 🔁 **Automação de tarefas repetitivas** via linha de comando
 - 🧮 **Cálculos automáticos** (ex.: coluna Total)
 - 🛡️ **Tratamento de erros** (arquivo inexistente, colunas ausentes)
+- 📊 **Geração de gráficos de barras** automaticamente
 
 ---
 

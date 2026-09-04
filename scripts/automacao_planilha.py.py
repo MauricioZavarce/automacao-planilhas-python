@@ -5,6 +5,7 @@ import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill
 from openpyxl.utils import get_column_letter
+from openpyxl.chart import BarChart, Reference
 
 # ------------------------------------------------------------
 # Funções auxiliares
@@ -70,13 +71,50 @@ def salvar_planilha(df: pd.DataFrame, caminho: Path, formatar: bool = True) -> N
 
     wb.save(caminho)
 
+def adicionar_grafico(caminho: Path, coluna_categoria: str, coluna_valor: str) -> None:
+    """
+    Adiciona um gráfico de barras à planilha salva.
+    O gráfico é inserido em uma nova aba chamada 'Gráfico'.
+    """
+    wb = load_workbook(caminho)
+    ws = wb.active
+
+    # Determinar as colunas
+    headers = [cell.value for cell in ws[1]]
+    if coluna_categoria not in headers or coluna_valor not in headers:
+        raise ValueError(f"Colunas '{coluna_categoria}' ou '{coluna_valor}' não encontradas.")
+
+    col_cat = headers.index(coluna_categoria) + 1
+    col_val = headers.index(coluna_valor) + 1
+
+    # Criar nova aba para o gráfico
+    ws_chart = wb.create_sheet('Gráfico')
+
+    # Dados para o gráfico
+    data = Reference(ws, min_col=col_val, min_row=1, max_row=ws.max_row, max_col=col_val)
+    cats = Reference(ws, min_col=col_cat, min_row=2, max_row=ws.max_row)
+
+    # Criar gráfico de barras
+    chart = BarChart()
+    chart.title = f"{coluna_valor} por {coluna_categoria}"
+    chart.y_axis.title = coluna_valor
+    chart.x_axis.title = coluna_categoria
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(cats)
+    chart.legend = None
+
+    # Posicionar gráfico na nova aba
+    ws_chart.add_chart(chart, "A1")
+
+    wb.save(caminho)
+
 # ------------------------------------------------------------
 # Função principal com argparse
 # ------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Automatiza processamento de planilhas: calcula Total e formata o resultado.'
+        description='Automatiza processamento de planilhas: calcula Total, formata e opcionalmente gera gráfico.'
     )
     parser.add_argument(
         'entrada',
@@ -93,6 +131,23 @@ def main():
         '--sem-formatacao',
         action='store_true',
         help='Não aplica formatação (negrito, cores, largura)'
+    )
+    parser.add_argument(
+        '--grafico',
+        action='store_true',
+        help='Adiciona um gráfico de barras ao arquivo de saída'
+    )
+    parser.add_argument(
+        '--coluna-categoria',
+        type=str,
+        default='Produto',
+        help='Coluna para o eixo X do gráfico (padrão: Produto)'
+    )
+    parser.add_argument(
+        '--coluna-valor',
+        type=str,
+        default='Total',
+        help='Coluna para o eixo Y do gráfico (padrão: Total)'
     )
     args = parser.parse_args()
 
@@ -111,6 +166,10 @@ def main():
 
         print(f"Salvando em: {caminho_saida}")
         salvar_planilha(df, caminho_saida, formatar=not args.sem_formatacao)
+
+        if args.grafico:
+            print("Adicionando gráfico...")
+            adicionar_grafico(caminho_saida, args.coluna_categoria, args.coluna_valor)
 
         print("✅ Concluído com sucesso!")
     except Exception as e:
